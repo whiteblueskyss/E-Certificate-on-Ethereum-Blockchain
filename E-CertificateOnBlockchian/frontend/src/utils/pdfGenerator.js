@@ -22,29 +22,35 @@ export function generateCertificatePDF({
 
   // Overlay dynamic fields - adjust x, y positions as needed
 
-  doc.setFontSize(14);
   doc.setFont("Pacifico", "normal");
+  doc.setFontSize(14);
   doc.setTextColor(0, 0, 0);
-  doc.text(`${name}`, 300, 350); // <-- Adjust x, y as needed
+  doc.text(name, 170, 417);
 
+  doc.setFontSize(20);
+  doc.setFont("times", "italic");
+  doc.text(`Bachelor of Science (Engineering)`, 180, 335);
   doc.setFontSize(14);
   doc.setFont("Pacifico", "normal");
-  doc.text(`Regn. No: ${registrationNumber}`, 300, 390);
-  doc.text(`${serialNo}`, 100, 50);
-  doc.text(schoolName, 300, 450);
-  doc.text(`Department: ${department}`, 300, 465);
-  doc.text(`Examination Year: ${examinationYear}`, 300, 480);
-  doc.text(`Grade: ${letterGrade} (CGPA: ${cgpa})`, 300, 510);
-  doc.text(`Date: ${issueDate}`, 300, 540);
+
+  doc.text(`Bachelor of Science (Engineering)`, 250, 450);
+  doc.text(`${registrationNumber}`, 459, 210);
+  doc.text(`${serialNo}`, 145, 209);
+  doc.text(schoolName, 250, 518);
+  doc.text(`${department}`, 225, 483);
+  doc.text(`${examinationYear}`, 400, 552);
+  doc.text(`${letterGrade}`, 370, 588);
+  doc.text(`${cgpa}`, 135, 613);
+  doc.text(`${issueDate}`, 70, 737);
   doc.setFontSize(10);
   doc.setFont("times", "italic");
-  doc.text(`Token: ${token}`, 70, pageHeight - 80);
+  doc.text(`Token: ${token}`, 240, 770);
   if (qrDataUrl) {
     doc.setFontSize(10);
-    doc.text("Scan to Verify:", pageWidth - 120, pageHeight - 180, {
+    doc.text("Scan to Verify:", 286, 686, {
       align: "center",
     });
-    doc.addImage(qrDataUrl, "PNG", pageWidth - 155, pageHeight - 170, 70, 70); // <-- Adjust position/size as needed
+    doc.addImage(qrDataUrl, "PNG", 250, 690, 70, 70);
   }
   // Save PDF
   doc.save(`certificate_${registrationNumber}.pdf`);
@@ -71,28 +77,34 @@ export function generateCertificatePDFDataUrl({
   doc.addImage("/ecertificate_bg.png", "PNG", 0, 0, pageWidth, pageHeight);
 
   doc.setFont("Pacifico", "normal");
-  doc.setFontSize(24);
-  doc.setTextColor(0, 0, 0);
-  doc.text(name, 300, 350);
   doc.setFontSize(14);
-  // doc.setFont("Pacifico", "normal");
+  doc.setTextColor(0, 0, 0);
+  doc.text(name, 170, 417);
 
-  doc.text(`Regn. No: ${registrationNumber}`, 300, 390);
-  doc.text(`${serialNo}`, 100, 50);
-  doc.text(schoolName, 300, 450);
-  doc.text(`Department: ${department}`, 300, 465);
-  doc.text(`Examination Year: ${examinationYear}`, 300, 480);
-  doc.text(`Grade: ${letterGrade} (CGPA: ${cgpa})`, 300, 510);
-  doc.text(`Date: ${issueDate}`, 300, 540);
+  doc.setFontSize(20);
+  doc.setFont("times", "italic");
+  doc.text(`Bachelor of Science (Engineering)`, 180, 335);
+  doc.setFontSize(14);
+  doc.setFont("Pacifico", "normal");
+
+  doc.text(`Bachelor of Science (Engineering)`, 250, 450);
+  doc.text(`${registrationNumber}`, 459, 210);
+  doc.text(`${serialNo}`, 145, 209);
+  doc.text(schoolName, 250, 518);
+  doc.text(`${department}`, 225, 483);
+  doc.text(`${examinationYear}`, 400, 552);
+  doc.text(`${letterGrade}`, 370, 588);
+  doc.text(`${cgpa}`, 135, 613);
+  doc.text(`${issueDate}`, 70, 737);
   doc.setFontSize(10);
   doc.setFont("times", "italic");
-  doc.text(`Token: ${token}`, 70, pageHeight - 80);
+  doc.text(`Token: ${token}`, 240, 770);
   if (qrDataUrl) {
     doc.setFontSize(10);
-    doc.text("Scan to Verify:", pageWidth - 120, pageHeight - 180, {
+    doc.text("Scan to Verify:", 286, 686, {
       align: "center",
     });
-    doc.addImage(qrDataUrl, "PNG", pageWidth - 155, pageHeight - 170, 70, 70);
+    doc.addImage(qrDataUrl, "PNG", 250, 690, 70, 70);
   }
   // Return as Data URL string
   return doc.output("dataurlstring");
@@ -119,25 +131,32 @@ export function generateCertificatePDFBlob({
   doc.setFont("Pacifico", "normal");
   doc.setFontSize(14);
   doc.setTextColor(0, 0, 0);
-  doc.text(name, 300, 350);
+  doc.text(name, 170, 417);
+
+  doc.setFontSize(20);
+  doc.setFont("times", "italic");
+  doc.text(`Bachelor of Science (Engineering)`, 180, 335);
   doc.setFontSize(14);
   doc.setFont("Pacifico", "normal");
-  doc.text(`Regn. No: ${registrationNumber}`, 300, 390);
-  doc.text(`${serialNo}`, 100, 50);
-  doc.text(schoolName, 300, 450);
-  doc.text(`Department: ${department}`, 300, 465);
-  doc.text(`Examination Year: ${examinationYear}`, 300, 480);
-  doc.text(`Grade: ${letterGrade} (CGPA: ${cgpa})`, 300, 510);
-  doc.text(`Date: ${issueDate}`, 300, 540);
+
+  doc.text(`Bachelor of Science (Engineering)`, 250, 450);
+  doc.text(`${registrationNumber}`, 459, 210);
+  doc.text(`${serialNo}`, 145, 209);
+  doc.text(schoolName, 250, 518);
+  doc.text(`${department}`, 225, 483);
+  doc.text(`${examinationYear}`, 400, 552);
+  doc.text(`${letterGrade}`, 370, 588);
+  doc.text(`${cgpa}`, 135, 613);
+  doc.text(`${issueDate}`, 70, 737);
   doc.setFontSize(10);
   doc.setFont("times", "italic");
-  doc.text(`Token: ${token}`, 70, pageHeight - 80);
+  doc.text(`Token: ${token}`, 240, 770);
   if (qrDataUrl) {
     doc.setFontSize(10);
-    doc.text("Scan to Verify:", pageWidth - 120, pageHeight - 180, {
+    doc.text("Scan to Verify:", 286, 686, {
       align: "center",
     });
-    doc.addImage(qrDataUrl, "PNG", pageWidth - 155, pageHeight - 170, 70, 70);
+    doc.addImage(qrDataUrl, "PNG", 250, 690, 70, 70);
   }
   // Return as Blob
   return doc.output("blob");
