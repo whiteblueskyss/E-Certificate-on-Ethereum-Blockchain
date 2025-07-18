@@ -1,163 +1,160 @@
 import jsPDF from "jspdf";
 import "../font/pacifico.js";
-export function generateCertificatePDF({
-  serialNo = "",
-  name = "",
-  registrationNumber = "",
-  schoolName = "",
-  department = "",
-  examinationYear = "",
-  letterGrade = "",
-  cgpa = "",
-  issueDate = "",
-  token = "",
-  qrDataUrl = "",
-}) {
-  const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+
+/**
+ * Certificate data structure for PDF generation
+ */
+const DEFAULT_CERTIFICATE_DATA = {
+  serialNo: "",
+  name: "",
+  registrationNumber: "",
+  schoolName: "",
+  department: "",
+  examinationYear: "",
+  letterGrade: "",
+  cgpa: "",
+  issueDate: "",
+  token: "",
+  qrDataUrl: "",
+};
+
+/**
+ * Core PDF generation function - creates the certificate layout
+ * @param {Object} data - Certificate data
+ * @returns {jsPDF} - PDF document instance
+ */
+function createCertificatePDF(data) {
+  const certificateData = { ...DEFAULT_CERTIFICATE_DATA, ...data };
+
+  const doc = new jsPDF({
+    orientation: "portrait",
+    unit: "pt",
+    format: "a4",
+  });
+
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
 
-  // Add Canva background image (make sure the file is in public folder)
+  // Add background image
   doc.addImage("/ecertificate_bg.png", "PNG", 0, 0, pageWidth, pageHeight);
 
-  // Overlay dynamic fields - adjust x, y positions as needed
-
+  // Set default styling
   doc.setFont("Pacifico", "normal");
   doc.setFontSize(14);
   doc.setTextColor(0, 0, 0);
-  doc.text(name, 170, 417);
 
+  // Certificate content positioning (adjust these coordinates as needed)
+  const positions = {
+    name: [170, 417],
+    degree: [180, 335],
+    degreeField: [250, 450],
+    registrationNumber: [459, 210],
+    serialNo: [145, 209],
+    schoolName: [250, 518],
+    department: [225, 483],
+    examinationYear: [400, 552],
+    letterGrade: [370, 588],
+    cgpa: [135, 613],
+    issueDate: [70, 737],
+    token: [240, 770],
+    qrText: [286, 686],
+    qrImage: [250, 690, 70, 70], // x, y, width, height
+  };
+
+  // Student name
+  doc.text(certificateData.name, ...positions.name);
+
+  // Degree title
   doc.setFontSize(20);
   doc.setFont("times", "italic");
-  doc.text(`Bachelor of Science (Engineering)`, 180, 335);
+  doc.text("Bachelor of Science (Engineering)", ...positions.degree);
+
+  // Reset font for other fields
   doc.setFontSize(14);
   doc.setFont("Pacifico", "normal");
 
-  doc.text(`Bachelor of Science (Engineering)`, 250, 450);
-  doc.text(`${registrationNumber}`, 459, 210);
-  doc.text(`${serialNo}`, 145, 209);
-  doc.text(schoolName, 250, 518);
-  doc.text(`${department}`, 225, 483);
-  doc.text(`${examinationYear}`, 400, 552);
-  doc.text(`${letterGrade}`, 370, 588);
-  doc.text(`${cgpa}`, 135, 613);
-  doc.text(`${issueDate}`, 70, 737);
+  // Certificate fields
+  doc.text("Bachelor of Science (Engineering)", ...positions.degreeField);
+  doc.text(certificateData.registrationNumber, ...positions.registrationNumber);
+  doc.text(certificateData.serialNo, ...positions.serialNo);
+  doc.text(certificateData.schoolName, ...positions.schoolName);
+  doc.text(certificateData.department, ...positions.department);
+  doc.text(certificateData.examinationYear, ...positions.examinationYear);
+  doc.text(certificateData.letterGrade, ...positions.letterGrade);
+  doc.text(certificateData.cgpa, ...positions.cgpa);
+  doc.text(certificateData.issueDate, ...positions.issueDate);
+
+  // Token (smaller font)
   doc.setFontSize(10);
   doc.setFont("times", "italic");
-  doc.text(`Token: ${token}`, 240, 770);
-  if (qrDataUrl) {
+  doc.text(`Token: ${certificateData.token}`, ...positions.token);
+
+  // QR Code for verification
+  if (certificateData.qrDataUrl) {
     doc.setFontSize(10);
-    doc.text("Scan to Verify:", 286, 686, {
-      align: "center",
-    });
-    doc.addImage(qrDataUrl, "PNG", 250, 690, 70, 70);
+    doc.text("Scan to Verify:", ...positions.qrText, { align: "center" });
+    doc.addImage(certificateData.qrDataUrl, "PNG", ...positions.qrImage);
   }
-  // Save PDF
-  doc.save(`certificate_${registrationNumber}.pdf`);
+
+  return doc;
 }
 
-// New: Generate PDF and return as Data URL for preview
-export function generateCertificatePDFDataUrl({
-  serialNo = "",
-  name = "",
-  registrationNumber = "",
-  schoolName = "",
-  department = "",
-  examinationYear = "",
-  letterGrade = "",
-  cgpa = "",
-  issueDate = "",
-  token = "",
-  qrDataUrl = "",
-}) {
-  const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
+/**
+ * Generate and download PDF certificate
+ * @param {Object} data - Certificate data
+ */
+export function generateCertificatePDF(data) {
+  const doc = createCertificatePDF(data);
+  const filename = `certificate_${data.registrationNumber || "unknown"}.pdf`;
+  doc.save(filename);
+}
 
-  doc.addImage("/ecertificate_bg.png", "PNG", 0, 0, pageWidth, pageHeight);
-
-  doc.setFont("Pacifico", "normal");
-  doc.setFontSize(14);
-  doc.setTextColor(0, 0, 0);
-  doc.text(name, 170, 417);
-
-  doc.setFontSize(20);
-  doc.setFont("times", "italic");
-  doc.text(`Bachelor of Science (Engineering)`, 180, 335);
-  doc.setFontSize(14);
-  doc.setFont("Pacifico", "normal");
-
-  doc.text(`Bachelor of Science (Engineering)`, 250, 450);
-  doc.text(`${registrationNumber}`, 459, 210);
-  doc.text(`${serialNo}`, 145, 209);
-  doc.text(schoolName, 250, 518);
-  doc.text(`${department}`, 225, 483);
-  doc.text(`${examinationYear}`, 400, 552);
-  doc.text(`${letterGrade}`, 370, 588);
-  doc.text(`${cgpa}`, 135, 613);
-  doc.text(`${issueDate}`, 70, 737);
-  doc.setFontSize(10);
-  doc.setFont("times", "italic");
-  doc.text(`Token: ${token}`, 240, 770);
-  if (qrDataUrl) {
-    doc.setFontSize(10);
-    doc.text("Scan to Verify:", 286, 686, {
-      align: "center",
-    });
-    doc.addImage(qrDataUrl, "PNG", 250, 690, 70, 70);
-  }
-  // Return as Data URL string
+/**
+ * Generate PDF certificate and return as Data URL for preview
+ * @param {Object} data - Certificate data
+ * @returns {string} - PDF as data URL string
+ */
+export function generateCertificatePDFDataUrl(data) {
+  const doc = createCertificatePDF(data);
   return doc.output("dataurlstring");
 }
 
-// New: Generate PDF and return as Blob for preview
-export function generateCertificatePDFBlob({
-  serialNo = "",
-  name = "",
-  registrationNumber = "",
-  schoolName = "",
-  department = "",
-  examinationYear = "",
-  letterGrade = "",
-  cgpa = "",
-  issueDate = "",
-  token = "",
-  qrDataUrl = "",
-}) {
-  const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
-  doc.addImage("/ecertificate_bg.png", "PNG", 0, 0, pageWidth, pageHeight);
-  doc.setFont("Pacifico", "normal");
-  doc.setFontSize(14);
-  doc.setTextColor(0, 0, 0);
-  doc.text(name, 170, 417);
-
-  doc.setFontSize(20);
-  doc.setFont("times", "italic");
-  doc.text(`Bachelor of Science (Engineering)`, 180, 335);
-  doc.setFontSize(14);
-  doc.setFont("Pacifico", "normal");
-
-  doc.text(`Bachelor of Science (Engineering)`, 250, 450);
-  doc.text(`${registrationNumber}`, 459, 210);
-  doc.text(`${serialNo}`, 145, 209);
-  doc.text(schoolName, 250, 518);
-  doc.text(`${department}`, 225, 483);
-  doc.text(`${examinationYear}`, 400, 552);
-  doc.text(`${letterGrade}`, 370, 588);
-  doc.text(`${cgpa}`, 135, 613);
-  doc.text(`${issueDate}`, 70, 737);
-  doc.setFontSize(10);
-  doc.setFont("times", "italic");
-  doc.text(`Token: ${token}`, 240, 770);
-  if (qrDataUrl) {
-    doc.setFontSize(10);
-    doc.text("Scan to Verify:", 286, 686, {
-      align: "center",
-    });
-    doc.addImage(qrDataUrl, "PNG", 250, 690, 70, 70);
-  }
-  // Return as Blob
+/**
+ * Generate PDF certificate and return as Blob for preview
+ * @param {Object} data - Certificate data
+ * @returns {Blob} - PDF as Blob object
+ */
+export function generateCertificatePDFBlob(data) {
+  const doc = createCertificatePDF(data);
   return doc.output("blob");
+}
+
+/**
+ * Utility function to validate certificate data
+ * @param {Object} data - Certificate data to validate
+ * @returns {Object} - Validation result with isValid and errors
+ */
+export function validateCertificateData(data) {
+  const errors = [];
+  const requiredFields = [
+    "name",
+    "registrationNumber",
+    "schoolName",
+    "department",
+    "examinationYear",
+    "letterGrade",
+    "cgpa",
+    "issueDate",
+  ];
+
+  requiredFields.forEach((field) => {
+    if (!data[field] || String(data[field]).trim() === "") {
+      errors.push(`${field} is required`);
+    }
+  });
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
 }

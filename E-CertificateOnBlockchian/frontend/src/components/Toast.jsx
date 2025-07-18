@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-const Toast = ({ message, type, isVisible, onClose }) => {
+/**
+ * Toast - Individual toast notification component
+ * Used by the ToastProvider in hooks/useToast.js
+ */
+const Toast = ({ message, type, onClose }) => {
+  // Auto-hide after 5 seconds
   useEffect(() => {
-    if (isVisible) {
-      const timer = setTimeout(() => {
-        onClose();
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [isVisible, onClose]);
-
-  if (!isVisible) return null;
+    const timer = setTimeout(() => {
+      onClose();
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
 
   const getToastStyles = () => {
     switch (type) {
@@ -43,7 +44,7 @@ const Toast = ({ message, type, isVisible, onClose }) => {
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50 animate-slide-in-right">
+    <div className="animate-slide-in-right">
       <div
         className={`flex items-center gap-3 px-6 py-4 rounded-lg border-l-4 shadow-lg backdrop-blur-sm ${getToastStyles()}`}
       >
@@ -58,33 +59,6 @@ const Toast = ({ message, type, isVisible, onClose }) => {
       </div>
     </div>
   );
-};
-
-export const useToast = () => {
-  const [toast, setToast] = useState({
-    message: "",
-    type: "",
-    isVisible: false,
-  });
-
-  const showToast = (message, type = "info") => {
-    setToast({ message, type, isVisible: true });
-  };
-
-  const hideToast = () => {
-    setToast((prev) => ({ ...prev, isVisible: false }));
-  };
-
-  const ToastComponent = () => (
-    <Toast
-      message={toast.message}
-      type={toast.type}
-      isVisible={toast.isVisible}
-      onClose={hideToast}
-    />
-  );
-
-  return { showToast, ToastComponent };
 };
 
 export default Toast;
