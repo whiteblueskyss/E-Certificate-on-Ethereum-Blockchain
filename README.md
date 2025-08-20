@@ -6,6 +6,8 @@ This is a sophisticated educational project that exemplifies cutting-edge blockc
 
 **A decentralized certificate issuing and verification system using NFTs, MetaMask, and QR codes** - This project allows educational institutions to issue tamper-proof certificates on the Ethereum blockchain and enables instant verification through QR codes or token verification.
 
+### Demo :  **[YouTube Video](https://www.youtube.com/watch?v=HsLQVXlGbLA)**
+
 ### 🎯 Project Purpose
 
 This system serves three primary stakeholders:
@@ -99,6 +101,7 @@ export const contractAddress = "YOUR_DEPLOYED_CONTRACT_ADDRESS_HERE";
    - **Chain ID**: 1337
    - **Currency Symbol**: ETH
 3. Import test accounts using private keys from the Hardhat node terminal
+4. By defualt account 0 will be admin account. Because this account is used to deploy the contract. 
 
 ### 8. Start Frontend Application
 
